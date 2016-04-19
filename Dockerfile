@@ -27,6 +27,9 @@ RUN update-alternatives --install "/usr/bin/javaws" "javaws" \
 RUN update-alternatives --install "/usr/bin/jps" "jps" \
     "/usr/lib/jvm/jdk1.7.0_71/bin/jps" 1
 
+RUN update-alternatives --install "/usr/bin/jar" "jar" \
+    "/usr/lib/jvm/jdk1.7.0_71/bin/jar" 1
+
 RUN update-alternatives --config java
 
 # disable ipv6
@@ -89,6 +92,11 @@ RUN mkdir /home/hadoop/workspace/mapred/local
 USER root
 ADD hadoop_init.sh /etc/hadoop_init.sh
 RUN chmod +x /etc/hadoop_init.sh
+
+# copying examples
+
+ADD wordcount_example/ /home/hadoop/wordcount_example/
+RUN chown -R hadoop:hadoop /home/hadoop/wordcount_example/
 
 CMD service ssh start && su hadoop && bash
 
